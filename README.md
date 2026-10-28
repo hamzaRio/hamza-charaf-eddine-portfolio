@@ -6,8 +6,10 @@ brass accent, Space Grotesk / IBM Plex Sans / IBM Plex Mono typography, sharp
 borders, restrained motion, and a technical data-flow motif aimed at
 recruiters scanning quickly for role fit.
 
-**Status: prototype, not yet deployed.** See [Before deploying](#before-deploying)
-for what's left.
+**Status: deployed.** The production site is live at
+[hamza-charaf-eddine-portfolio.vercel.app](https://hamza-charaf-eddine-portfolio.vercel.app).
+The content is grounded in the approved CV and the actual MarrakechDunes booking
+application; it does not claim unverified employment achievements.
 
 ## Stack
 
@@ -46,7 +48,8 @@ Downloadable CVs live in `public/cv/` (`Hamza_Charaf_Eddine_CV_EN.pdf` and
 ## Getting started
 
 ```bash
-npm install
+npm ci
+copy .env.example .env.local
 npm run dev
 ```
 
@@ -59,10 +62,11 @@ to English for any other language.
 
 | Variable | Required | Purpose |
 | --- | --- | --- |
-| `NEXT_PUBLIC_SITE_URL` | Before deploying | Absolute origin (no trailing slash) used to build canonical URLs, Open Graph/Twitter URLs, and the sitemap. Falls back to `http://localhost:3000` if unset, so local dev works without it. |
+| `NEXT_PUBLIC_SITE_URL` | Production | Absolute origin (no trailing slash) used to build canonical URLs, Open Graph/Twitter URLs, and the sitemap. Falls back to `http://localhost:3000` if unset, so local dev works without it. |
 
-Copy `.env.example` to `.env.local` and set a real value once a production
-domain is assigned.
+Copy `.env.example` to `.env.local` and set a real value for local testing.
+This variable is intentionally public because it is rendered into metadata;
+never put passwords, API keys, or tokens in a `NEXT_PUBLIC_*` variable.
 
 ## Scripts
 
@@ -95,25 +99,34 @@ domain is assigned.
   `app/[lang]/twitter-image.tsx`)
 - `app/sitemap.ts` and `app/robots.ts`
 
-## Before deploying
+## Deployment and repository security
 
-This prototype has not been published. Before pushing to GitHub and
-deploying to Vercel:
+The GitHub `main` branch is connected to Vercel. A push to `main` creates a
+production deployment; pull requests create previews. Keep
+`NEXT_PUBLIC_SITE_URL` aligned with the live domain in Vercel's Production,
+Preview and Development environments.
 
-1. **Set `NEXT_PUBLIC_SITE_URL`** to the real production domain in the
-   Vercel project's environment variables (and in `.env.local` for any
-   further local testing against a production-like URL). Until this is
-   set, canonical/OG URLs fall back to `http://localhost:3000`.
-2. **Confirm the domain** the site will actually live at (a Vercel
-   `*.vercel.app` subdomain, or a custom domain) and add it in the Vercel
-   project settings if custom.
-3. **Re-check availability wording** (`Contact` page, home page CTA, About
-   page facts) if the Data 5 end date or availability date changes before
-   launch — all three currently say "from November 2026."
-4. **Spot-check the generated Open Graph images** once deployed, using a
-   real social-preview debugger (e.g. the Facebook Sharing Debugger or
-   Twitter Card Validator) — `next/og` output can only be fully verified
-   against how each platform actually fetches and caches it.
-5. **Re-run** `npm run lint`, `npx tsc --noEmit`, and `npm run build`
-   after any further content edits, and re-test the production build
-   locally with `npm run start` before pushing.
+Visitors can view the website but cannot edit its deployed files. Only GitHub
+collaborators with write access can change this repository. For a professional,
+recoverable workflow:
+
+1. Keep `.env.local`, credentials, tokens and private documents out of Git.
+   The ignore rules protect all `.env*` files while allowing only the safe
+   placeholder `.env.example`.
+2. Enable two-factor authentication on GitHub and review **Settings →
+   Collaborators** regularly. Set the repository to private if you do not want
+   people to inspect or fork the source code.
+3. Protect `main` in **Settings → Branches**: require pull requests and a
+   passing build, and disable force-pushes and branch deletion.
+4. Review every Vercel preview before merging. Run the checks below after
+   content or dependency changes, and use `npm audit` when updating packages.
+
+```bash
+npm run lint
+npx tsc --noEmit
+npm run build
+npm run start
+```
+
+The repository contains public portfolio assets only; it does not contain
+application credentials or a production database for MarrakechDunes.
