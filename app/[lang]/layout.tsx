@@ -1,9 +1,11 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { notFound } from "next/navigation";
 import Nav from "@/components/nav";
 import Footer from "@/components/footer";
 import { getDictionary } from "@/lib/dictionaries";
 import { locales, siteConfig, type Locale } from "@/lib/site-config";
+import { personAndWebsiteJsonLd, jsonLdScript } from "@/lib/structured-data";
+import { fontVariables } from "@/lib/fonts";
 import "../globals.css";
 
 export function generateStaticParams() {
@@ -13,6 +15,11 @@ export function generateStaticParams() {
 function isLocale(value: string): value is Locale {
   return (locales as readonly string[]).includes(value);
 }
+
+export const viewport: Viewport = {
+  themeColor: "#0a1222",
+  colorScheme: "dark",
+};
 
 export async function generateMetadata({
   params,
@@ -46,7 +53,7 @@ export async function generateMetadata({
       type: "profile",
     },
     twitter: {
-      card: "summary",
+      card: "summary_large_image",
       title: `${siteConfig.name} — ${dict.meta.titleSuffix}`,
       description: dict.meta.description,
     },
@@ -63,10 +70,15 @@ export default async function RootLocaleLayout({
   const { lang } = await params;
   if (!isLocale(lang)) notFound();
   const dict = getDictionary(lang);
+  const jsonLd = personAndWebsiteJsonLd(lang, dict);
 
   return (
-    <html lang={lang} suppressHydrationWarning>
+    <html lang={lang} suppressHydrationWarning className={fontVariables}>
       <body className="flex min-h-screen flex-col bg-ink text-text antialiased">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: jsonLdScript(jsonLd) }}
+        />
         <a href="#main-content" className="skip-link focus-ring">
           {dict.nav.skipToContent}
         </a>

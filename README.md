@@ -17,8 +17,11 @@ application; it does not claim unverified employment achievements.
 - TypeScript
 - Tailwind CSS v4
 - [framer-motion](https://www.framer.com/motion/) for restrained, `prefers-reduced-motion`-aware animation
-- Self-hosted [Fontsource](https://fontsource.org/) fonts (no Google Fonts network dependency)
-- `next/og` (`ImageResponse`) for generated Open Graph / Twitter preview images
+- Self-hosted [Fontsource](https://fontsource.org/) fonts via `next/font/local`
+  (`lib/fonts.ts`) — no Google Fonts network dependency, and no separate
+  render-blocking font request either
+- `next/og` (`ImageResponse`) for generated Open Graph / Twitter preview images,
+  the favicon (`app/icon.tsx`, `app/apple-icon.tsx`), and `app/manifest.ts`
 
 ## Content and routes
 
@@ -97,6 +100,10 @@ never put passwords, API keys, or tokens in a `NEXT_PUBLIC_*` variable.
 - Open Graph and Twitter Card metadata per page, with a shared generated
   preview image per locale (`app/[lang]/opengraph-image.tsx`,
   `app/[lang]/twitter-image.tsx`)
+- JSON-LD structured data (`Person` and `WebSite`, Schema.org) on every page
+  — see `lib/structured-data.ts`
+- Custom favicon and app icons (`app/favicon.ico`, `app/icon.tsx`,
+  `app/apple-icon.tsx`) and a web app manifest (`app/manifest.ts`)
 - `app/sitemap.ts` and `app/robots.ts`
 
 ## Deployment and repository security
@@ -117,7 +124,10 @@ recoverable workflow:
    Collaborators** regularly. Set the repository to private if you do not want
    people to inspect or fork the source code.
 3. Protect `main` in **Settings → Branches**: require pull requests and a
-   passing build, and disable force-pushes and branch deletion.
+   passing build, and disable force-pushes and branch deletion. The
+   `CI` workflow (`.github/workflows/ci.yml`) runs lint, the TypeScript
+   check, and a production build on every push and pull request — set it
+   as a required status check once branch protection is enabled.
 4. Review every Vercel preview before merging. Run the checks below after
    content or dependency changes, and use `npm audit` when updating packages.
 

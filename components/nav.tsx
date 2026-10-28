@@ -62,7 +62,7 @@ export default function Nav({ locale, dict }: { locale: Locale; dict: Dictionary
         <div className="hidden items-center gap-4 lg:flex">
           <div className="flex items-center gap-1 font-data text-xs text-muted" aria-label="Language">
             <Link
-              href={localePath(locale, paths.home)}
+              href={locale === "en" ? pathname : switchHref}
               aria-current={locale === "en" ? "true" : undefined}
               className={`focus-ring px-1.5 py-1 ${locale === "en" ? "text-accent" : "hover:text-text"}`}
             >
@@ -70,7 +70,7 @@ export default function Nav({ locale, dict }: { locale: Locale; dict: Dictionary
             </Link>
             <span aria-hidden="true">/</span>
             <Link
-              href={switchHref}
+              href={locale === "de" ? pathname : switchHref}
               aria-current={locale === "de" ? "true" : undefined}
               className={`focus-ring px-1.5 py-1 ${locale === "de" ? "text-accent" : "hover:text-text"}`}
             >
@@ -116,11 +116,19 @@ export default function Nav({ locale, dict }: { locale: Locale; dict: Dictionary
             ))}
             <div className="mt-2 flex items-center justify-between border-t border-line pt-4">
               <div className="flex items-center gap-1 font-data text-xs text-muted">
-                <Link href={localePath(locale, paths.home)} className="px-1.5 py-1">
+                <Link
+                  href={locale === "en" ? pathname : switchHref}
+                  aria-current={locale === "en" ? "true" : undefined}
+                  className={`px-1.5 py-1 ${locale === "en" ? "text-accent" : ""}`}
+                >
                   EN
                 </Link>
                 <span aria-hidden="true">/</span>
-                <Link href={switchHref} className="px-1.5 py-1">
+                <Link
+                  href={locale === "de" ? pathname : switchHref}
+                  aria-current={locale === "de" ? "true" : undefined}
+                  className={`px-1.5 py-1 ${locale === "de" ? "text-accent" : ""}`}
+                >
                   DE
                 </Link>
               </div>

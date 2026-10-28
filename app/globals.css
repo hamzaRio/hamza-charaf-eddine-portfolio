@@ -1,14 +1,10 @@
-@import "@fontsource/space-grotesk/latin-500.css";
-@import "@fontsource/space-grotesk/latin-600.css";
-@import "@fontsource/space-grotesk/latin-700.css";
-@import "@fontsource/ibm-plex-sans/latin-400.css";
-@import "@fontsource/ibm-plex-sans/latin-500.css";
-@import "@fontsource/ibm-plex-sans/latin-600.css";
-@import "@fontsource/ibm-plex-sans/latin-700.css";
-@import "@fontsource/ibm-plex-mono/latin-400.css";
-@import "@fontsource/ibm-plex-mono/latin-500.css";
-@import "@fontsource/ibm-plex-mono/latin-600.css";
 @import "tailwindcss";
+/* Space Grotesk / IBM Plex Sans / IBM Plex Mono are self-hosted via
+   next/font/local (see lib/fonts.ts) instead of these @fontsource CSS
+   @import rules — same files and weights, but preloaded and inlined at
+   build time instead of fetched as a separate, render-blocking request.
+   The --font-display-local/-body-/-data- variables below come from the
+   className applied to <html> in app/[lang]/layout.tsx. */
 
 @theme inline {
   --color-ink: #0a1222;
@@ -23,9 +19,9 @@
   --color-accent-soft: #d9a46333;
   --color-accent-strong: #eab784;
 
-  --font-display: "Space Grotesk", sans-serif;
-  --font-body: "IBM Plex Sans", sans-serif;
-  --font-data: "IBM Plex Mono", monospace;
+  --font-display: var(--font-display-local), sans-serif;
+  --font-body: var(--font-body-local), sans-serif;
+  --font-data: var(--font-data-local), monospace;
 
   --breakpoint-xs: 420px;
 }

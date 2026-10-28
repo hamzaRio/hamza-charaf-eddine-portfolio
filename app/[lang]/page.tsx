@@ -95,7 +95,8 @@ export default async function HomePage({ params }: { params: Promise<{ lang: Loc
           <p className="mt-4 font-body text-base text-muted sm:text-lg">{dict.home.introBody}</p>
         </div>
 
-        <div className="mt-12 grid gap-px overflow-hidden border border-line bg-line sm:grid-cols-2">
+        <h2 className="mt-16 font-display text-xl font-semibold text-text">{dict.home.strengthsTitle}</h2>
+        <div className="mt-6 grid gap-px overflow-hidden border border-line bg-line sm:grid-cols-2">
           {dict.home.strengths.map((s) => (
             <div key={s.title} className="bg-ink p-6 sm:p-7">
               <h3 className="font-display text-lg font-semibold text-text">{s.title}</h3>
